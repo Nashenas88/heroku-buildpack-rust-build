@@ -7,11 +7,13 @@ ENV_DIR=${3:-}
 export CARGO_TARGET_DIR="$CACHE_DIR/target"
 export DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
 
-echo "-----> Building application using Cargo"
+echo "-----> Building application binaries using Cargo"
 cd "$BUILD_DIR"
 rm -rf target/
-cargo build --release
-if [ $? -ne 0 ]; then
-    exit 1
-fi
+for file in $(ls src/bin/*.rs); do
+    cargo build --release --bin $(basename ${file%.*})
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+done
 cp -a "$CARGO_TARGET_DIR" target
