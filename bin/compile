@@ -11,4 +11,7 @@ echo "-----> Building application using Cargo"
 cd "$BUILD_DIR"
 rm -rf target/
 cargo build --release
+if [ $? -ne 0 ]; then
+    exit 1
+fi
 cp -a "$CARGO_TARGET_DIR" target
