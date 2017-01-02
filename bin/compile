@@ -1,0 +1,14 @@
+#!/bin/bash
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+
+export CARGO_TARGET_DIR="$CACHE_DIR/target"
+export DATABASE_URL=$(cat $ENV_DIR/DATABASE_URL)
+
+echo "-----> Building application using Cargo"
+cd "$BUILD_DIR"
+rm -rf target/
+cargo build --release
+cp -a "$CARGO_TARGET_DIR" target
